@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ls.dao.NewsUserDao">
+    <resultMap id="newsUserMap" type="com.ls.model.NewsUser">
+        <id property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPassword" column="user_password"/>
+        <result property="type" column="type"/>
+    </resultMap>
+    <insert id="register" parameterType="com.ls.model.NewsUser">
+        <!--<selectKey resultType="int" order="BEFORE" keyColumn="id">
+            SELECT NEWS_SEQ.nextval from dual
+        </selectKey>-->
+        insert into NEWS_USER VALUES (NEWS_SEQ.nextval,#{userName},#{userPassword},#{type})
+    </insert>
+    <select id="login" parameterType="com.ls.model.NewsUser" resultMap="newsUserMap">
+        select * from NEWS_USER WHERE
+        USER_NAME=#{userName} and USER_PASSWORD=#{userPassword} and type=#{type}
+    </select>
+    <select id="queryUserName" parameterType="String" resultMap="newsUserMap">
+        select * from NEWS_USER WHERE USER_NAME=#{userName}
+    </select>
+</mapper>

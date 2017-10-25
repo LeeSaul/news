@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:foreach="">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #main{
+            text-align: center;
+            margin-left: 10px;
+            margin-top: 10px;
+        }
+        #title{
+            font-weight: bold;
+        }
+        #bt2{
+            margin-top: 10px;
+            margin-left: 10px;
+
+        }
+    </style>
+</head>
+<body>
+<body>
+<h3>${info}</h3>
+<div id="main">
+    <span id="title">发布新闻信息</span><br/><br/>
+    <form action="releaseNewsInfo" method="post">
+        新闻标题：<input type="text" name="title"><br/><br/>
+        新闻内容：<textarea name="content" rows="1" cols="18"></textarea><br/><br/>
+        <%--发布时间：<input type="date" name="releaseDate"><br/>--%>
+        <input type="text" name="userId" value="${loginUser.id}" hidden="hidden"><br/>
+        发布者：<input type="text" value="${loginUser.userName}"><br/><br/>
+        <input type="submit" id="bt1" value="发布">
+        <span id="bt2">
+        <c:choose>
+        <c:when test="${loginUser.type}==1">
+            <a href="queryUserNewsInfo?userId=${loginUser.id}">返回新闻列表</a>
+        </c:when>
+        <c:otherwise>
+            <a href="queryAdminNewsInfo">返回新闻列表</a>
+        </c:otherwise>
+    </c:choose>
+    </span>
+    </form>
+
+</div>
+
+
+
+
+</body>
+</html>

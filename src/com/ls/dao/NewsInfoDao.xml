@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ls.dao.NewsInfoDao">
+    <resultMap id="newsInfoMap" type="com.ls.model.NewsInfo">
+        <id column="info_id" property="id" javaType="int"/>
+        <result column="user_id" property="userId"/>
+        <result column="content" property="content"/>
+        <result column="title" property="title"/>
+        <result column="release_date" property="releaseDate"/>
+        <association property="newsUser" resultMap="newsUserMap"/>
+    </resultMap>
+    <resultMap id="newsUserMap" type="com.ls.model.NewsUser">
+        <id column="u_id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_type" property="type"/>
+    </resultMap>
+    <select id="queryNewsInfoByUserId" parameterType="String" resultMap="newsInfoMap">
+      SELECT ni.ID info_id,ni.user_id user_id,ni.content content,ni.title title,ni.release_date release_date,nu.ID u_id,nu.user_name user_name,nu.user_password user_password,nu.type user_type
+       from NEWS_INFO ni,NEWS_USER nu WHERE ni.USER_ID=#{userId} and ni.USER_ID=nu.ID
+    </select>
+
+    <select id="queryAllNewsInfo" resultMap="newsInfoMap">
+        SELECT ni.ID info_id,ni.user_id user_id,ni.content content,ni.title title,ni.release_date release_date,nu.ID u_id,nu.user_name user_name,nu.user_password user_password,nu.type user_type from NEWS_INFO ni,NEWS_USER nu WHERE ni.USER_ID=nu.ID
+    </select>
+    <insert id="releaseNews" parameterType="com.ls.model.NewsInfo">
+        insert into news_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="userId!=null">
+                user_id,
+            </if>
+            <if test="title!=null">
+                title,
+            </if>
+            <if test="content!=null">
+                content,
+            </if>
+            <if test="releaseDate!=null">
+                release_date
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                news_seq.nextval,
+            </if>
+            <if test="userId!=null">
+                #{userId},
+            </if>
+            <if test="title!=null">
+               #{title},
+            </if>
+            <if test="content!=null">
+                #{content},
+            </if>
+            <if test="releaseDate!=null">
+                #{releaseDate}
+            </if>
+        </trim>
+    </insert>
+    <update id="updateNews" parameterType="com.ls.model.NewsInfo">
+        UPDATE NEWS_INFO SET
+        <trim prefixOverrides=",">
+            <if test="userId!=null">
+                user_id=#{userId},
+            </if>
+            <if test="title!=null">
+                title=#{title},
+            </if>
+            <if test="content!=null">
+                content=#{content},
+            </if>
+            <if test="releaseDate!=null">
+                release_date=#{releaseDate}
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+    <select id="queryNewsInfoById" parameterType="String" resultMap="newsInfoMap">
+        SELECT * from NEWS_INFO WHERE id=#{id}
+    </select>
+    <update id="updateNewsInfo" parameterType="com.ls.model.NewsInfo">
+        update NEWS_INFO
+        SET
+        <trim suffixOverrides=",">
+            <if test="userId!=null">
+                user_id=#{userId},
+            </if>
+            <if test="title!=null">
+                title=#{title},
+            </if>
+            <if test="content!=null">
+                content=#{content},
+            </if>
+            <if test="releaseDate!=null">
+                release_date=#{releaseDate}
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteNewsInfo">
+        delete from NEWS_INFO WHERE ID=#{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ls.dao.NewsCommentDao">
+    <resultMap id="newsCommentMap" type="com.ls.model.NewsComment">
+        <id property="id" column="comment_id"/>
+        <result property="infoId" column="info_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userComment" column="user_comment"/>
+        <result property="commentDate" column="comment_date"/>
+        <association property="newsUser" resultMap="newsUserMap"/>
+    </resultMap>
+    <resultMap id="newsUserMap" type="com.ls.model.NewsUser">
+        <id column="u_id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_type" property="type"/>
+    </resultMap>
+    <select id="queryAllComments" parameterType="int" resultType="String" resultMap="newsCommentMap">
+        select nc.ID comment_id,nc.USER_ID user_id,nc.INFO_ID info_id,nc.USER_COMMENT user_comment,nc.COMMENT_DATE comment_date,nu.ID u_id,nu.USER_NAME user_name,nu.USER_PASSWORD user_password,nu.TYPE user_type from NEWS_COMMENT nc,NEWS_USER nu WHERE nc.INFO_ID=#{infoId} and nc.user_id=nu.id
+    </select>
+    <insert id="addComment" parameterType="com.ls.model.NewsComment">
+        insert into NEWS_COMMENT(ID, USER_ID, INFO_ID, USER_COMMENT, COMMENT_DATE)
+        VALUES(news_seq.nextval,#{userId}, #{infoId},#{userComment}, #{commentDate})
+    </insert>
+    <delete id="deleteCommentByInfoId" parameterType="String">
+        delete from NEWS_COMMENT WHERE INFO_ID=#{infoId}
+    </delete>
+
+</mapper>
